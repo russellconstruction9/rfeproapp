@@ -1,0 +1,5 @@
+{
+  "name": "Remix: FoamCalc Pro",
+  "description": "A PWA calculator for spray foam insulation contractors to calculate building surface area and material yields.",
+  "requestFramePermissions": []
+}
