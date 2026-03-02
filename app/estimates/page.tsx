@@ -1,10 +1,10 @@
 "use client"
 
 import { useSupabaseData } from "@/hooks/use-supabase-data"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, FileText, CheckCircle2, Trash2, Loader2 } from "lucide-react"
-import Link from "next/link"
+import { FileText, CheckCircle2, Trash2, Loader2 } from "lucide-react"
+import { AppLayout } from "@/components/AppLayout"
 
 export default function EstimatesPage() {
   const { estimates, customers, markEstimateSold, deleteEstimate, loading } = useSupabaseData()
@@ -12,21 +12,15 @@ export default function EstimatesPage() {
   if (loading) return <div className="min-h-screen bg-slate-50 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-orange-600" /></div>
 
   return (
+    <AppLayout>
     <div className="min-h-screen bg-slate-50 p-4 md:p-8">
       <div className="mx-auto max-w-4xl space-y-6">
-        <div className="flex items-center space-x-4">
-          <Link href="/">
-            <Button variant="ghost" size="icon">
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-          </Link>
-          <div className="flex-1">
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
-              <FileText className="h-6 w-6 text-orange-600" />
-              Estimates
-            </h1>
-            <p className="text-sm text-slate-500">View and manage your estimates.</p>
-          </div>
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+            <FileText className="h-6 w-6 text-orange-600" />
+            Estimates
+          </h1>
+          <p className="text-sm text-slate-500">View and manage your estimates.</p>
         </div>
 
         <div className="grid grid-cols-1 gap-4">
@@ -77,5 +71,6 @@ export default function EstimatesPage() {
         </div>
       </div>
     </div>
+    </AppLayout>
   )
 }

@@ -8,10 +8,10 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Settings, Calculator, Droplets, Ruler, DollarSign, Package, CheckCircle2, Users, FileText, Save, Loader2 } from "lucide-react"
+import { Calculator, Droplets, Ruler, DollarSign, Package, CheckCircle2, Users, Save, Loader2 } from "lucide-react"
 import Link from "next/link"
-import Image from "next/image"
 import { useSearchParams } from "next/navigation"
+import { AppLayout } from "@/components/AppLayout"
 
 function HomeContent() {
   const { settings, inventory, customers, addEstimate, loading } = useSupabaseData()
@@ -105,44 +105,17 @@ function HomeContent() {
   if (loading) return <div className="min-h-screen bg-slate-50 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-orange-600" /></div>
 
   return (
+    <AppLayout>
     <div className="min-h-screen bg-slate-50 p-4 md:p-8 font-sans">
       <div className="mx-auto max-w-4xl space-y-6">
         
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="flex items-center gap-3 mb-1">
-              <div className="bg-orange-600 p-2 rounded-lg">
-                <Droplets className="h-6 w-6 text-white" />
-              </div>
-              <h1 className="text-2xl font-bold tracking-tight text-slate-900">
-                FoamCalc Pro
-              </h1>
-            </div>
-            <p className="text-sm text-slate-500">Professional spray foam estimation tool.</p>
-          </div>
-          <div className="flex gap-2">
-            <Link href="/customers">
-              <Button variant="outline" size="icon" className="rounded-full">
-                <Users className="h-5 w-5 text-slate-600" />
-              </Button>
-            </Link>
-            <Link href="/estimates">
-              <Button variant="outline" size="icon" className="rounded-full">
-                <FileText className="h-5 w-5 text-slate-600" />
-              </Button>
-            </Link>
-            <Link href="/inventory">
-              <Button variant="outline" size="icon" className="rounded-full">
-                <Package className="h-5 w-5 text-slate-600" />
-              </Button>
-            </Link>
-            <Link href="/settings">
-              <Button variant="outline" size="icon" className="rounded-full">
-                <Settings className="h-5 w-5 text-slate-600" />
-              </Button>
-            </Link>
-          </div>
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+            <Calculator className="h-6 w-6 text-orange-600" />
+            New Estimate
+          </h1>
+          <p className="text-sm text-slate-500">Calculate spray foam requirements and save an estimate.</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -442,6 +415,7 @@ function HomeContent() {
         </div>
       </div>
     </div>
+    </AppLayout>
   )
 }
 

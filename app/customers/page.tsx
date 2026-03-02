@@ -2,12 +2,13 @@
 
 import { useState } from "react"
 import { useSupabaseData } from "@/hooks/use-supabase-data"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, Users, Plus, Loader2 } from "lucide-react"
+import { Users, Plus, Loader2 } from "lucide-react"
 import Link from "next/link"
+import { AppLayout } from "@/components/AppLayout"
 
 export default function CustomersPage() {
   const { customers, addCustomer, loading } = useSupabaseData()
@@ -32,15 +33,11 @@ export default function CustomersPage() {
   if (loading) return <div className="min-h-screen bg-slate-50 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-orange-600" /></div>
 
   return (
+    <AppLayout>
     <div className="min-h-screen bg-slate-50 p-4 md:p-8">
       <div className="mx-auto max-w-4xl space-y-6">
-        <div className="flex items-center space-x-4">
-          <Link href="/">
-            <Button variant="ghost" size="icon">
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-          </Link>
-          <div className="flex-1">
+        <div className="flex items-center justify-between">
+          <div>
             <h1 className="text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
               <Users className="h-6 w-6 text-orange-600" />
               Customers
@@ -100,5 +97,6 @@ export default function CustomersPage() {
         </div>
       </div>
     </div>
+    </AppLayout>
   )
 }

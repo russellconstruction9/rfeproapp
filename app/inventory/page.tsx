@@ -6,8 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, Save, Package, Loader2 } from "lucide-react"
-import Link from "next/link"
+import { Save, Package, Loader2 } from "lucide-react"
+import { AppLayout } from "@/components/AppLayout"
 
 export default function InventoryPage() {
   const { inventory, updateInventory, loading } = useSupabaseData()
@@ -28,21 +28,15 @@ export default function InventoryPage() {
   if (loading) return <div className="min-h-screen bg-slate-50 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-orange-600" /></div>
 
   return (
+    <AppLayout>
     <div className="min-h-screen bg-slate-50 p-4 md:p-8">
       <div className="mx-auto max-w-2xl space-y-6">
-        <div className="flex items-center space-x-4">
-          <Link href="/">
-            <Button variant="ghost" size="icon">
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-          </Link>
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
-              <Package className="h-6 w-6 text-orange-600" />
-              Inventory Management
-            </h1>
-            <p className="text-sm text-slate-500">Manage your current warehouse stock of foam sets.</p>
-          </div>
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+            <Package className="h-6 w-6 text-orange-600" />
+            Inventory Management
+          </h1>
+          <p className="text-sm text-slate-500">Manage your current warehouse stock of foam sets.</p>
         </div>
 
         <Card>
@@ -84,5 +78,6 @@ export default function InventoryPage() {
         </div>
       </div>
     </div>
+    </AppLayout>
   )
 }
