@@ -1,43 +1,35 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { useCalculatorStore } from "@/store/use-calculator-store"
+import { useState } from "react"
+import { useSupabaseData } from "@/hooks/use-supabase-data"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, Users, Plus } from "lucide-react"
+import { ArrowLeft, Users, Plus, Loader2 } from "lucide-react"
 import Link from "next/link"
 
 export default function CustomersPage() {
-  const { customers, addCustomer } = useCalculatorStore()
-  const [isMounted, setIsMounted] = useState(false)
+  const { customers, addCustomer, loading } = useSupabaseData()
   const [isAdding, setIsAdding] = useState(false)
+  const [saving, setSaving] = useState(false)
 
   const [name, setName] = useState("")
   const [phone, setPhone] = useState("")
   const [address, setAddress] = useState("")
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsMounted(true)
-  }, [])
-
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!name) return alert("Name is required")
-    addCustomer({
-      id: Date.now().toString(),
-      name,
-      phone,
-      address,
-    })
+    setSaving(true)
+    await addCustomer({ name, phone, address })
+    setSaving(false)
     setIsAdding(false)
     setName("")
     setPhone("")
     setAddress("")
   }
 
-  if (!isMounted) return null
+  if (loading) return <div className="min-h-screen bg-slate-50 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-orange-600" /></div>
 
   return (
     <div className="min-h-screen bg-slate-50 p-4 md:p-8">
@@ -81,7 +73,10 @@ export default function CustomersPage() {
               </div>
               <div className="flex justify-end gap-2 pt-4">
                 <Button variant="outline" onClick={() => setIsAdding(false)}>Cancel</Button>
-                <Button onClick={handleSave} className="bg-orange-600 hover:bg-orange-700 text-white">Save Customer</Button>
+                <Button onClick={handleSave} className="bg-orange-600 hover:bg-orange-700 text-white" disabled={saving}>
+                  {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                  {saving ? "Saving..." : "Save Customer"}
+                </Button>
               </div>
             </CardContent>
           </Card>

@@ -1,31 +1,31 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useCalculatorStore } from "@/store/use-calculator-store"
+import { useSupabaseData } from "@/hooks/use-supabase-data"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, Save } from "lucide-react"
+import { ArrowLeft, Save, Loader2 } from "lucide-react"
 import Link from "next/link"
 
 export default function SettingsPage() {
-  const { settings, updateSettings } = useCalculatorStore()
+  const { settings, updateSettings, loading } = useSupabaseData()
   const [localSettings, setLocalSettings] = useState(settings)
-  const [isMounted, setIsMounted] = useState(false)
+  const [saving, setSaving] = useState(false)
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsMounted(true)
     setLocalSettings(settings)
   }, [settings])
 
-  const handleSave = () => {
-    updateSettings(localSettings)
+  const handleSave = async () => {
+    setSaving(true)
+    await updateSettings(localSettings)
+    setSaving(false)
     alert("Settings saved successfully!")
   }
 
-  if (!isMounted) return null
+  if (loading) return <div className="min-h-screen bg-slate-50 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-orange-600" /></div>
 
   return (
     <div className="min-h-screen bg-slate-50 p-4 md:p-8">
@@ -101,9 +101,9 @@ export default function SettingsPage() {
         </Card>
 
         <div className="flex justify-end">
-          <Button onClick={handleSave} className="w-full sm:w-auto">
-            <Save className="mr-2 h-4 w-4" />
-            Save Settings
+          <Button onClick={handleSave} className="w-full sm:w-auto" disabled={saving}>
+            {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
+            {saving ? "Saving..." : "Save Settings"}
           </Button>
         </div>
       </div>

@@ -1,22 +1,15 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { useCalculatorStore } from "@/store/use-calculator-store"
+import { useSupabaseData } from "@/hooks/use-supabase-data"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, FileText, CheckCircle2, Trash2 } from "lucide-react"
+import { ArrowLeft, FileText, CheckCircle2, Trash2, Loader2 } from "lucide-react"
 import Link from "next/link"
 
 export default function EstimatesPage() {
-  const { estimates, customers, markEstimateSold, deleteEstimate } = useCalculatorStore()
-  const [isMounted, setIsMounted] = useState(false)
+  const { estimates, customers, markEstimateSold, deleteEstimate, loading } = useSupabaseData()
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsMounted(true)
-  }, [])
-
-  if (!isMounted) return null
+  if (loading) return <div className="min-h-screen bg-slate-50 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-orange-600" /></div>
 
   return (
     <div className="min-h-screen bg-slate-50 p-4 md:p-8">

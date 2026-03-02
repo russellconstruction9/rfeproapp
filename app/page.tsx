@@ -1,22 +1,22 @@
 "use client"
 
 import { useState, useEffect, Suspense } from "react"
-import { useCalculatorStore } from "@/store/use-calculator-store"
+import { useSupabaseData } from "@/hooks/use-supabase-data"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Settings, Calculator, Droplets, Ruler, DollarSign, Package, CheckCircle2, Users, FileText, Save } from "lucide-react"
+import { Settings, Calculator, Droplets, Ruler, DollarSign, Package, CheckCircle2, Users, FileText, Save, Loader2 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { useSearchParams } from "next/navigation"
 
 function HomeContent() {
-  const { settings, inventory, customers, addEstimate } = useCalculatorStore()
-  const [isMounted, setIsMounted] = useState(false)
+  const { settings, inventory, customers, addEstimate, loading } = useSupabaseData()
   const [jobSaved, setJobSaved] = useState(false)
+  const [savingJob, setSavingJob] = useState(false)
   const [selectedCustomerId, setSelectedCustomerId] = useState<string>("")
   const searchParams = useSearchParams()
 
@@ -40,8 +40,6 @@ function HomeContent() {
   const [gableThickness, setGableThickness] = useState<number>(2)
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsMounted(true)
     const customerId = searchParams.get('customerId')
     if (customerId) {
       setSelectedCustomerId(customerId)
@@ -80,15 +78,15 @@ function HomeContent() {
 
   const estimatedCost = (openSets * settings.openCellPrice) + (closedSets * settings.closedCellPrice)
 
-  const handleSaveJob = () => {
+  const handleSaveJob = async () => {
     if (!selectedCustomerId) {
       alert("Please select a customer first.")
       return
     }
     
+    setSavingJob(true)
     const now = new Date()
-    addEstimate({
-      id: now.getTime().toString(),
+    await addEstimate({
       customerId: selectedCustomerId,
       date: now.toISOString(),
       status: 'draft',
@@ -98,12 +96,13 @@ function HomeContent() {
       totalArea,
       totalBoardFeet
     })
+    setSavingJob(false)
     
     setJobSaved(true)
     setTimeout(() => setJobSaved(false), 3000)
   }
 
-  if (!isMounted) return null
+  if (loading) return <div className="min-h-screen bg-slate-50 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-orange-600" /></div>
 
   return (
     <div className="min-h-screen bg-slate-50 p-4 md:p-8 font-sans">
@@ -372,7 +371,7 @@ function HomeContent() {
                     className="w-full bg-orange-600 hover:bg-orange-700 text-white font-semibold" 
                     size="lg"
                     onClick={handleSaveJob}
-                    disabled={jobSaved || totalSets === 0 || !selectedCustomerId}
+                    disabled={jobSaved || savingJob || totalSets === 0 || !selectedCustomerId}
                   >
                     {jobSaved ? (
                       <>

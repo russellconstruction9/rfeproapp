@@ -1,31 +1,31 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useCalculatorStore } from "@/store/use-calculator-store"
+import { useSupabaseData } from "@/hooks/use-supabase-data"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, Save, Package } from "lucide-react"
+import { ArrowLeft, Save, Package, Loader2 } from "lucide-react"
 import Link from "next/link"
 
 export default function InventoryPage() {
-  const { inventory, updateInventory } = useCalculatorStore()
+  const { inventory, updateInventory, loading } = useSupabaseData()
   const [localInventory, setLocalInventory] = useState(inventory)
-  const [isMounted, setIsMounted] = useState(false)
+  const [saving, setSaving] = useState(false)
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsMounted(true)
     setLocalInventory(inventory)
   }, [inventory])
 
-  const handleSave = () => {
-    updateInventory(localInventory)
+  const handleSave = async () => {
+    setSaving(true)
+    await updateInventory(localInventory)
+    setSaving(false)
     alert("Inventory saved successfully!")
   }
 
-  if (!isMounted) return null
+  if (loading) return <div className="min-h-screen bg-slate-50 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-orange-600" /></div>
 
   return (
     <div className="min-h-screen bg-slate-50 p-4 md:p-8">
@@ -77,9 +77,9 @@ export default function InventoryPage() {
         </Card>
 
         <div className="flex justify-end">
-          <Button onClick={handleSave} className="w-full sm:w-auto">
-            <Save className="mr-2 h-4 w-4" />
-            Save Inventory
+          <Button onClick={handleSave} className="w-full sm:w-auto" disabled={saving}>
+            {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
+            {saving ? "Saving..." : "Save Inventory"}
           </Button>
         </div>
       </div>

@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react"
 import { useParams, useRouter } from "next/navigation"
-import { useCalculatorStore } from "@/store/use-calculator-store"
+import { useSupabaseData } from "@/hooks/use-supabase-data"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ArrowLeft, Edit, Trash2, Plus, FileText, CheckCircle2, Phone, MapPin, User } from "lucide-react"
+import { ArrowLeft, Edit, Trash2, Plus, FileText, CheckCircle2, Phone, MapPin, User, Loader2 } from "lucide-react"
 import Link from "next/link"
 
 export default function CustomerDashboard() {
@@ -15,8 +15,7 @@ export default function CustomerDashboard() {
   const router = useRouter()
   const id = params.id as string
   
-  const { customers, estimates, updateCustomer, deleteCustomer, markEstimateSold, deleteEstimate } = useCalculatorStore()
-  const [isMounted, setIsMounted] = useState(false)
+  const { customers, estimates, updateCustomer, deleteCustomer, markEstimateSold, deleteEstimate, loading } = useSupabaseData()
   const [isEditing, setIsEditing] = useState(false)
 
   const customer = customers.find(c => c.id === id)
@@ -25,14 +24,12 @@ export default function CustomerDashboard() {
   const [editForm, setEditForm] = useState({ name: "", phone: "", address: "" })
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsMounted(true)
     if (customer) {
       setEditForm({ name: customer.name, phone: customer.phone, address: customer.address })
     }
   }, [customer])
 
-  if (!isMounted) return null
+  if (loading) return <div className="min-h-screen bg-slate-50 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-orange-600" /></div>
   if (!customer) {
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
@@ -44,15 +41,15 @@ export default function CustomerDashboard() {
     )
   }
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     if (!editForm.name) return alert("Name is required")
-    updateCustomer(id, editForm)
+    await updateCustomer(id, editForm)
     setIsEditing(false)
   }
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (confirm("Are you sure you want to delete this customer and all their estimates? This action cannot be undone.")) {
-      deleteCustomer(id)
+      await deleteCustomer(id)
       router.push("/customers")
     }
   }
