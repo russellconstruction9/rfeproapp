@@ -3,12 +3,13 @@
 import { useState, useEffect } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { useSupabaseData } from "@/hooks/use-supabase-data"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ArrowLeft, Edit, Trash2, Plus, FileText, CheckCircle2, Phone, MapPin, User, Loader2 } from "lucide-react"
 import Link from "next/link"
+import { AppLayout } from "@/components/AppLayout"
 
 export default function CustomerDashboard() {
   const params = useParams()
@@ -32,12 +33,14 @@ export default function CustomerDashboard() {
   if (loading) return <div className="min-h-screen bg-slate-50 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-orange-600" /></div>
   if (!customer) {
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
-        <h2 className="text-2xl font-bold text-slate-900 mb-4">Customer not found</h2>
-        <Link href="/customers">
-          <Button variant="outline"><ArrowLeft className="mr-2 h-4 w-4" /> Back to Customers</Button>
-        </Link>
-      </div>
+      <AppLayout>
+        <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
+          <h2 className="text-2xl font-bold text-slate-900 mb-4">Customer not found</h2>
+          <Link href="/customers">
+            <Button variant="outline"><ArrowLeft className="mr-2 h-4 w-4" /> Back to Customers</Button>
+          </Link>
+        </div>
+      </AppLayout>
     )
   }
 
@@ -59,6 +62,7 @@ export default function CustomerDashboard() {
   const soldValue = customerEstimates.filter(e => e.status === 'sold').reduce((sum, est) => sum + est.estimatedCost, 0)
 
   return (
+    <AppLayout>
     <div className="min-h-screen bg-slate-50 p-4 md:p-8">
       <div className="mx-auto max-w-5xl space-y-6">
         
@@ -237,5 +241,6 @@ export default function CustomerDashboard() {
         </div>
       </div>
     </div>
+    </AppLayout>
   )
 }
