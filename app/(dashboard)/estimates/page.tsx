@@ -4,16 +4,14 @@ import { useSupabaseData } from "@/hooks/use-supabase-data"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { FileText, CheckCircle2, Trash2, Loader2 } from "lucide-react"
-import { AppLayout } from "@/components/AppLayout"
 
 export default function EstimatesPage() {
   const { estimates, customers, markEstimateSold, deleteEstimate, loading } = useSupabaseData()
 
-  if (loading) return <div className="min-h-screen bg-slate-50 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-orange-600" /></div>
+  if (loading) return <div className="flex-1 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-orange-600" /></div>
 
   return (
-    <AppLayout>
-    <div className="min-h-screen bg-slate-50 p-4 md:p-8">
+    <div className="p-4 md:p-6 lg:p-8">
       <div className="mx-auto max-w-4xl space-y-6">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
@@ -71,6 +69,5 @@ export default function EstimatesPage() {
         </div>
       </div>
     </div>
-    </AppLayout>
   )
 }

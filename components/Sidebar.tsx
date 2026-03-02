@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Calculator, Users, FileText, Package, Settings, Droplets, LogOut } from "lucide-react"
+import { Calculator, Users, FileText, Package, Settings, Droplets, LogOut, X } from "lucide-react"
 import { createClient } from "@/utils/supabase/client"
 import { cn } from "@/lib/utils"
 
@@ -31,19 +31,30 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
 
   return (
     <div className="flex flex-col h-full bg-slate-900 text-white">
-      {/* Logo */}
-      <div className="flex items-center gap-3 px-4 py-5 border-b border-slate-700">
-        <div className="bg-orange-600 p-2 rounded-lg shrink-0">
-          <Droplets className="h-5 w-5 text-white" />
+      {/* Logo & Close button (mobile) */}
+      <div className="flex items-center justify-between px-4 py-5 border-b border-slate-700/50">
+        <div className="flex items-center gap-3">
+          <div className="bg-orange-600 p-2 rounded-lg shrink-0 shadow-lg shadow-orange-600/20">
+            <Droplets className="h-5 w-5 text-white" />
+          </div>
+          <div>
+            <p className="font-bold text-white leading-tight">FoamCalc Pro</p>
+            <p className="text-xs text-slate-400">Spray Foam Estimator</p>
+          </div>
         </div>
-        <div>
-          <p className="font-bold text-white leading-tight">FoamCalc Pro</p>
-          <p className="text-xs text-slate-400">Spray Foam Estimator</p>
-        </div>
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors md:hidden"
+            aria-label="Close menu"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        )}
       </div>
 
-      {/* Nav */}
-      <nav className="flex-1 p-3 space-y-1">
+      {/* Navigation */}
+      <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
         {navItems.map((item) => {
           const isActive =
             item.href === "/"
@@ -55,10 +66,10 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
               href={item.href}
               onClick={onClose}
               className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150",
                 isActive
-                  ? "bg-orange-600 text-white"
-                  : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                  ? "bg-orange-600 text-white shadow-md shadow-orange-600/25"
+                  : "text-slate-300 hover:bg-slate-800/70 hover:text-white"
               )}
             >
               <item.icon className="h-5 w-5 shrink-0" />
@@ -69,10 +80,10 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
       </nav>
 
       {/* Sign out */}
-      <div className="p-3 border-t border-slate-700">
+      <div className="p-3 border-t border-slate-700/50">
         <button
           onClick={handleSignOut}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors w-full"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800/70 hover:text-white transition-all duration-150 w-full"
         >
           <LogOut className="h-5 w-5 shrink-0" />
           Sign Out

@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ArrowLeft, Edit, Trash2, Plus, FileText, CheckCircle2, Phone, MapPin, User, Loader2 } from "lucide-react"
 import Link from "next/link"
-import { AppLayout } from "@/components/AppLayout"
 
 export default function CustomerDashboard() {
   const params = useParams()
@@ -30,17 +29,15 @@ export default function CustomerDashboard() {
     }
   }, [customer])
 
-  if (loading) return <div className="min-h-screen bg-slate-50 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-orange-600" /></div>
+  if (loading) return <div className="flex-1 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-orange-600" /></div>
   if (!customer) {
     return (
-      <AppLayout>
-        <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">Customer not found</h2>
-          <Link href="/customers">
-            <Button variant="outline"><ArrowLeft className="mr-2 h-4 w-4" /> Back to Customers</Button>
-          </Link>
-        </div>
-      </AppLayout>
+      <div className="flex-1 flex flex-col items-center justify-center p-4">
+        <h2 className="text-2xl font-bold text-slate-900 mb-4">Customer not found</h2>
+        <Link href="/customers">
+          <Button variant="outline"><ArrowLeft className="mr-2 h-4 w-4" /> Back to Customers</Button>
+        </Link>
+      </div>
     )
   }
 
@@ -62,8 +59,7 @@ export default function CustomerDashboard() {
   const soldValue = customerEstimates.filter(e => e.status === 'sold').reduce((sum, est) => sum + est.estimatedCost, 0)
 
   return (
-    <AppLayout>
-    <div className="min-h-screen bg-slate-50 p-4 md:p-8">
+    <div className="p-4 md:p-6 lg:p-8">
       <div className="mx-auto max-w-5xl space-y-6">
         
         {/* Header */}
@@ -199,19 +195,14 @@ export default function CustomerDashboard() {
                             {estimate.status.toUpperCase()}
                           </span>
                         </div>
-                        <p className="text-sm text-slate-500">
-                          {estimate.totalArea.toLocaleString()} sq ft • {estimate.totalBoardFeet.toLocaleString()} bd ft
-                        </p>
-                        <p className="text-sm font-medium text-slate-900">
-                          Cost: ${estimate.estimatedCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                        </p>
+                        <p className="text-sm text-slate-500">Area: {estimate.totalArea.toLocaleString()} sq ft &bull; {estimate.totalBoardFeet.toLocaleString()} bd ft</p>
+                        <p className="text-sm font-medium text-slate-900">${estimate.estimatedCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                       </div>
-                      
-                      <div className="flex items-center gap-2 w-full sm:w-auto">
+                      <div className="flex items-center gap-2">
                         {estimate.status === 'draft' && (
                           <Button 
                             onClick={() => markEstimateSold(estimate.id)}
-                            className="bg-orange-600 hover:bg-orange-700 text-white flex-1 sm:flex-none"
+                            className="bg-orange-600 hover:bg-orange-700 text-white"
                             size="sm"
                           >
                             <CheckCircle2 className="mr-2 h-4 w-4" />
@@ -223,7 +214,7 @@ export default function CustomerDashboard() {
                           size="icon"
                           className="text-red-500 hover:text-red-700 hover:bg-red-50"
                           onClick={() => {
-                            if (confirm("Are you sure you want to delete this estimate?")) {
+                            if (confirm("Delete this estimate?")) {
                               deleteEstimate(estimate.id)
                             }
                           }}
@@ -237,10 +228,8 @@ export default function CustomerDashboard() {
               )}
             </div>
           </div>
-
         </div>
       </div>
     </div>
-    </AppLayout>
   )
 }

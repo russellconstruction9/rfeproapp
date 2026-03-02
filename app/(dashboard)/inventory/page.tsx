@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Save, Package, Loader2 } from "lucide-react"
-import { AppLayout } from "@/components/AppLayout"
 
 export default function InventoryPage() {
   const { inventory, updateInventory, loading } = useSupabaseData()
@@ -25,11 +24,10 @@ export default function InventoryPage() {
     alert("Inventory saved successfully!")
   }
 
-  if (loading) return <div className="min-h-screen bg-slate-50 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-orange-600" /></div>
+  if (loading) return <div className="flex-1 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-orange-600" /></div>
 
   return (
-    <AppLayout>
-    <div className="min-h-screen bg-slate-50 p-4 md:p-8">
+    <div className="p-4 md:p-6 lg:p-8">
       <div className="mx-auto max-w-2xl space-y-6">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
@@ -78,6 +76,5 @@ export default function InventoryPage() {
         </div>
       </div>
     </div>
-    </AppLayout>
   )
 }

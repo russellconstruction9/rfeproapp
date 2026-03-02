@@ -8,7 +8,6 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Users, Plus, Loader2 } from "lucide-react"
 import Link from "next/link"
-import { AppLayout } from "@/components/AppLayout"
 
 export default function CustomersPage() {
   const { customers, addCustomer, loading } = useSupabaseData()
@@ -30,11 +29,10 @@ export default function CustomersPage() {
     setAddress("")
   }
 
-  if (loading) return <div className="min-h-screen bg-slate-50 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-orange-600" /></div>
+  if (loading) return <div className="flex-1 flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-orange-600" /></div>
 
   return (
-    <AppLayout>
-    <div className="min-h-screen bg-slate-50 p-4 md:p-8">
+    <div className="p-4 md:p-6 lg:p-8">
       <div className="mx-auto max-w-4xl space-y-6">
         <div className="flex items-center justify-between">
           <div>
@@ -97,6 +95,7 @@ export default function CustomersPage() {
         </div>
       </div>
     </div>
-    </AppLayout>
+  )
+}
   )
 }

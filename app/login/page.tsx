@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2 } from "lucide-react"
+import { Loader2, Droplets } from "lucide-react"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -66,11 +66,19 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
-      <Card className="w-full max-w-md">
+      <div className="w-full max-w-md space-y-6">
+        <div className="flex flex-col items-center gap-2">
+          <div className="bg-orange-600 p-3 rounded-xl">
+            <Droplets className="h-8 w-8 text-white" />
+          </div>
+          <h1 className="text-2xl font-bold text-slate-900">FoamCalc Pro</h1>
+          <p className="text-sm text-slate-500">Professional Spray Foam Estimator</p>
+        </div>
+      <Card className="w-full">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Welcome back</CardTitle>
+          <CardTitle className="text-xl font-bold text-center">Welcome back</CardTitle>
           <CardDescription className="text-center">
-            Enter your email to sign in to your account
+            Sign in to your account
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -120,6 +128,7 @@ export default function LoginPage() {
           </div>
         </CardFooter>
       </Card>
+      </div>
     </div>
   )
 }
